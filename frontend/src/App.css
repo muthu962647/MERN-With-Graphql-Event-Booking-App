@@ -1,0 +1,6 @@
+.main-content{
+  margin-top: 60px;
+  /* border: 1px solid black; */
+  display: flex;
+  text-align: center;
+}

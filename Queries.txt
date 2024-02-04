@@ -5,3 +5,23 @@ query{
     }
   }
 }
+
+query{
+  bookings{
+    _id
+    event{
+      title
+    }
+  }
+}
+
+query {
+  login(Credentials: {
+    email: "exme1@examplte.com",
+    password: "oi435y1349uheifbe"
+  }) {
+    userId
+    token
+    tokenExpiration
+  }
+}

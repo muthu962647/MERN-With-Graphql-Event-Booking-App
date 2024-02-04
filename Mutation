@@ -44,3 +44,23 @@ query{
 
   }
 }
+
+
+mutation{
+  bookEvent(eventId:"65b642bb349cb72a69f28b4c"){
+    _id
+    createdAt
+    updatedAt
+  }
+}
+
+
+
+
+mutation{
+  cancelBooking(bookingId: "65b786e756c32b397837bc79"){
+    title
+    description
+    price
+  }
+}
