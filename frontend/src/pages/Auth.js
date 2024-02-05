@@ -1,17 +1,13 @@
-import React , { useState}from 'react'
+import React , { useContext, useState}from 'react'
 import './Auth.css'
 import AuthContext from '../context/auth-context';
 
-
-
 function Authpage(props){
 
-    let contextType = AuthContext
-
-    console.log("Yeah")
     const [email , SetEmail] = useState("");
     const [password, SetPassword] = useState("");
     const [isLoggedin,SetLogin] = useState(true);
+    const { login } = useContext(AuthContext);
 
     const ModifyLogin = () => {
         SetLogin(!isLoggedin);
@@ -60,6 +56,7 @@ function Authpage(props){
 
 
         const options = {
+
             method: 'POST',
             body: JSON.stringify(requestBody),
             headers: {
@@ -78,10 +75,12 @@ function Authpage(props){
             
         }).then(resData => {
 
-            console.log(resData);
+            const {token, userId, tokenExpiration } = resData.data.login;
+
             if(isLoggedin){
+
                 if(resData.data.login.token){
-                    this.context.login(resData.data.login.token, resData.data.login.userId, resData.data.login.toenExpiration);
+                    login(token, userId, tokenExpiration);
                 }
             }
         }
@@ -93,6 +92,7 @@ function Authpage(props){
     }
 
     return (
+        
         <form className='auth-form' onSubmit={handleSubmit}>
             <h3>{isLoggedin?"LOG IN":"SIGN UP"} your Account</h3>
             <div className="form-control">

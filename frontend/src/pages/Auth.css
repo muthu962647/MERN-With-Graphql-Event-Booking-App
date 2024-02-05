@@ -19,7 +19,7 @@
 }
 
 .form-actions button{
-    background: rgb(89, 157, 228);
+    background: rgb(119, 89, 228);
     font:inherit;
     border: 1px solid rgb(89, 157, 228);
     border-radius: 3px;
@@ -32,5 +32,5 @@
 }
 
 .form-actions button:hover{
-    background-color: rgb(107, 107, 174);
+    background-color: rgb(119, 89, 228);
 }
