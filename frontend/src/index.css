@@ -11,3 +11,39 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+
+
+.form-control label,
+.form-control label{
+    width: 100%;
+    display: block;
+}
+
+.form-control{
+    margin-bottom: 1rem;
+}
+
+.form-control label{
+    margin-bottom: 0.5rem;
+}
+
+
+.form-actions button, .btn{
+    background: rgb(119, 89, 228);
+    font:inherit;
+    border: 1px solid rgb(89, 157, 228);
+    border-radius: 3px;
+    padding: 0.25rem 1rem;
+    margin: 1rem;
+    box-shadow: 1px 1px 5px rgb(89, 157, 228);
+    color: white;
+    cursor: pointer;
+
+}
+
+.form-actions button:hover,
+.form-actions button:active,
+.btn:hover{
+    background-color: rgb(119, 89, 228);
+}

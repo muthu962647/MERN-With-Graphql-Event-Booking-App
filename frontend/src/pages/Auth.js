@@ -9,6 +9,7 @@ function Authpage(props){
     const [isLoggedin,SetLogin] = useState(true);
     const { login } = useContext(AuthContext);
 
+
     const ModifyLogin = () => {
         SetLogin(!isLoggedin);
     }
@@ -86,7 +87,6 @@ function Authpage(props){
         }
         )
         .catch(err => {
-
             console.log(err);
         })
     }

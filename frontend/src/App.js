@@ -41,12 +41,12 @@ render() {
 
       <MainNavigation />
       <div className="main-content">
-      {!this.context.token && <Navigate from = "/" to = "/auth"/>}
-      {this.context.token &&<Navigate from = "/" to = "/events"/>}
-      {this.context.token &&<Navigate from = "/auth" to = "/events"/>}
+      {this.state.token &&<Navigate from = "/" to = "/events"/>}
+      {/* {!this.state.token && <Navigate from = "/" to = "/auth"/>}
+      {this.state.token &&<Navigate from = "/auth" to = "/events"/>} */}
         <Routes>
           {!this.state.token &&  <Route  path='/auth' element={<Authpage/>} />}
-          {!this.state.token && <Route  path='/events' element={<Eventspage/>} />}
+          {<Route  path='/events' element={<Eventspage/>} />}
           {this.state.token && <Route  path='/bookings' element={<Bookingspage/>} />}
           <Route  path='*' element={<NoPage/>} />
         </Routes>
