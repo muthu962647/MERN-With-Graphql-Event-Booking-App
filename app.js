@@ -8,6 +8,7 @@ const { schema } = require('./graphql/schema/index');
 const { rootValue } = require('./graphql/resolvers/index');
 
 const isAuth = require('./middleware/is-auth');
+const { print } = require('./Logger.js');
 
 
 const app = express();
@@ -24,6 +25,8 @@ app.use((req,res,next) => {
     }
     next();
 });
+
+
 
 // app.use(cors);
 

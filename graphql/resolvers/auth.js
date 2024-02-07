@@ -2,6 +2,7 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
 const User = require('../../models/user');
+const { print } = require('../../Logger');
 
 
 module.exports = {
@@ -30,6 +31,8 @@ module.exports = {
     },
 
     login: async(args) => {
+
+        print("Logged In");
 
         const {email, password} = args.Credentials
 

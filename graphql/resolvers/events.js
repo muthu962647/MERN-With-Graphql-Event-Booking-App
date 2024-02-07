@@ -2,7 +2,9 @@ const {transformEvent, user } = require('./merge')
 
 const Event = require('../../models/event');
 const User = require('../../models/user');
-const { dateToString } = require('../../helpers/date')
+const { dateToString } = require('../../helpers/date');
+const { print } = require('../../Logger');
+
 
 
 module.exports = {
@@ -27,10 +29,12 @@ module.exports = {
 
 
     createEvent: async( args , req)=> {
+        
+        print("Create Event");
 
-        // if(!req.isAuth){
-        //     throw new Error('Unauthenticated');
-        // }
+        if(!req.isAuth){
+            throw new Error('Unauthenticated');
+        }
 
         const { title, description, price, date } = args.eventInput;
 
