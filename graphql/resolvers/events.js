@@ -30,7 +30,6 @@ module.exports = {
 
     createEvent: async( args , req)=> {
         
-        print("Create Event");
 
         if(!req.isAuth){
             throw new Error('Unauthenticated');
@@ -45,6 +44,8 @@ module.exports = {
             date,
             creator: req.userId
         });
+
+        console.log(event);
 
         const result = await event.save()
         

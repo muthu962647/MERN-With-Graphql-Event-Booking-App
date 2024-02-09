@@ -41,9 +41,9 @@ render() {
 
       <MainNavigation />
       <div className="main-content">
-      {this.state.token &&<Navigate from = "/" to = "/events"/>}
-      {/* {!this.state.token && <Navigate from = "/" to = "/auth"/>}
-      {this.state.token &&<Navigate from = "/auth" to = "/events"/>} */}
+      {/* {this.state.token &&<Navigate from = "/" to = "/events"/>} */}
+      {!this.state.token && <Navigate from = "/" to = "/auth"/>}
+      {/* {this.state.token &&<Navigate from = "/auth" to = "/events"/>} */}
         <Routes>
           {!this.state.token &&  <Route  path='/auth' element={<Authpage/>} />}
           {<Route  path='/events' element={<Eventspage/>} />}

@@ -4,6 +4,7 @@ const { dateToString } = require('../../helpers/date')
 
 
 const transformEvent = event => {
+   
     return {
         ...event._doc,
         date: dateToString(event.date),
@@ -12,9 +13,13 @@ const transformEvent = event => {
 };
 
 const transformBooking = booking =>{
+
+    const userId = booking._doc.user;
+    console.log(userId);
+
     return {
         ...booking._doc,
-        user: user.bind(this, booking._doc.user),
+        user: user.bind(this, userId),
         event: singleEvent.bind(this, booking._doc.event),
         createdAt: dateToString(booking._doc.createdAt),
         updatedAt: dateToString(booking._doc.updatedAt)
@@ -46,13 +51,14 @@ const user = async (userId) => {
 
     try{
 
+       
         const user = await User.findById(userId);
-
+        
         return {...user._doc , createdEvents: event.bind(this,user._doc.createdEvents )}
     
 
     }catch(err){
-        throw err
+        throw new Error("Can't Find the User")
     }
     
 }

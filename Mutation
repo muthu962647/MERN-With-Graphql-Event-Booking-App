@@ -47,7 +47,7 @@ query{
 
 
 mutation{
-  bookEvent(eventId:"65b642bb349cb72a69f28b4c"){
+  bookEvent(eventId:"65c33149d46803670fb9a653"){
     _id
     createdAt
     updatedAt

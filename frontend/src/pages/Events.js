@@ -3,6 +3,8 @@ import Modal from "../components/Modal/Modal.js";
 import "./Events.css";
 import Backdrop from "../components/Backdrop/Backdrop.js";
 import AuthContext from "../context/auth-context.js";
+import EventList from "../components/Events/EventList/EventList.js";
+import Spinner from "../components/Spinner/Spinner.js";
 
 function Eventspage(props) {
 
@@ -14,8 +16,10 @@ function Eventspage(props) {
     const [price, setPrice] = useState(0);
     const [events, setEvents] = useState([]);
     const [isLoading, setLoading] = useState(false);
+    const [selectedEvent, setSelectedEvent] = useState(null);
+    
 
-    const { token } = useContext(AuthContext);
+    const { token, userId } = useContext(AuthContext);
 
     useEffect(() => {
       fetchEvents();
@@ -28,6 +32,8 @@ function Eventspage(props) {
 
     const modalCancelHandler = () =>{
         setCreate(false);
+        setSelectedEvent(null)
+        
     }
 
     const fetchEvents = () => {
@@ -39,7 +45,10 @@ function Eventspage(props) {
               title,
               description,
               date,
-              price   
+              price,
+              creator{
+                _id
+              }   
             }
          }`
       }
@@ -52,6 +61,8 @@ function Eventspage(props) {
         }
     };
 
+    setLoading(true);
+
     fetch(`http://localhost:8000/graphql`, options)
         .then(res => {
             console.log(res);
@@ -61,17 +72,21 @@ function Eventspage(props) {
             return res.json();
         })
         .then(resData => {
-            console.log(resData.data.events);
+
             setEvents(resData.data.events);
+            setLoading(false);
+
         })
         .catch(err => {
+
             console.log(err);
+            setLoading(false);
+
         });
     }
 
     const modalConfirmHandler = () => {
-      const event = { title, price, date, description };
-      console.log("Deii");
+      
   
       if (title.trim().length === 0 || price === null || date.trim().length === 0 || description.trim().length === 0) {
           return;
@@ -107,15 +122,38 @@ function Eventspage(props) {
   
       fetch(`http://localhost:8000/graphql`, options)
           .then(res => {
-              console.log(res);
+              
               if (res.status !== 200 && res.status !== 201) {
                   throw new Error('Failed!')
               }
               return res.json();
           })
           .then(resData => {
-              fetchEvents();
-              console.log(resData);
+
+            const {_id, title, description, date, price, creator} = resData.data.createEvent;
+
+            console.log({_id, title, description, date, price, creator});
+
+            setEvents((prevEvents) => {
+
+                let updatedEvents = [...prevEvents];
+                updatedEvents.push({
+                        _id,
+                        title,
+                        description,
+                        date,
+                        price,
+                        creator: {
+                            _id: userId
+                        }
+                    });
+
+                    console.log(updatedEvents);
+                
+                return updatedEvents;
+
+            })
+             
           })
           .catch(err => {
               console.log(err);
@@ -124,6 +162,16 @@ function Eventspage(props) {
       setCreate(false);
   }
 
+    const showDetailHandler = (eventId) => {
+        console.log(eventId);
+        events.map((event) => {
+            if (event._id == eventId){
+                setSelectedEvent(event);
+                console.log(selectedEvent);
+            }
+        }) 
+
+    }
 
   
     
@@ -133,7 +181,7 @@ function Eventspage(props) {
 
       {create && <Backdrop/>}
 
-      {create && <Modal title='Add Event' canCancel canConfirm onCancel = {modalCancelHandler} onConfirm = {modalConfirmHandler}>
+      {create && <Modal title='Add Event' canCancel canConfirm confirmText = {"Confirm"} onCancel = {modalCancelHandler} onConfirm = {modalConfirmHandler}>
          <form >
 
             <div className="form-control">
@@ -169,12 +217,17 @@ function Eventspage(props) {
 
         <section>
 
-        <ul className="events__list">
-            {events.map((event) => (
-                <li key={event._id} className="events__list-item">{event.title}</li>
-             ))}
-        </ul>
-
+            {selectedEvent && <Backdrop/>}
+            {selectedEvent &&
+            <Modal title = {selectedEvent.title} confirmText = {"Book"} onCancel = {modalCancelHandler} onConfirm = {showDetailHandler}>
+                <h1>{selectedEvent.title}</h1>
+                <h2>
+                {selectedEvent.price} - {new Date(selectedEvent.date).toLocaleDateString()}
+                </h2>
+            </Modal>
+         }
+        {isLoading ? <Spinner/> : <EventList events= {events} onViewDetail = {showDetailHandler}/>}
+    
         </section>
     </>
   );

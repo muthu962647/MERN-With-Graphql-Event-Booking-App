@@ -7,9 +7,9 @@ module.exports ={
 
     bookings: async(args,req) => {
 
-        if(!req.isAuth){
-            throw new Error('Unauthenticated');
-        }
+        // if(!req.isAuth){
+        //     throw new Error('Unauthenticated');
+        // }
 
         try{
 
@@ -34,7 +34,7 @@ module.exports ={
 
         const fetchedEvent = await Event.findOne({ _id: args.eventId})        
         const booking = new Booking({
-            user: req.userId,
+            user: '65bf258a34dd9e38be84780a',
             event: fetchedEvent
         });
 
@@ -51,6 +51,8 @@ module.exports ={
         }
 
         try{
+
+            console.log(args.bookingId);
 
             const booking = await Booking.findById(args.bookingId).populate('event');
 
