@@ -1,8 +1,13 @@
 import React , { useContext, useState}from 'react'
+import { useNavigate } from 'react-router-dom';
 import './Auth.css'
 import AuthContext from '../context/auth-context';
+import {  useSnackbar } from 'notistack'
 
 function Authpage(props){
+
+    const { enqueueSnackbar } = useSnackbar();
+    const navigate = useNavigate();
 
     const [email , SetEmail] = useState("");
     const [password, SetPassword] = useState("");
@@ -76,18 +81,31 @@ function Authpage(props){
             
         }).then(resData => {
 
-            const {token, userId, tokenExpiration } = resData.data.login;
-
             if(isLoggedin){
+                const {token, userId, tokenExpiration } = resData.data.login;
 
                 if(resData.data.login.token){
                     login(token, userId, tokenExpiration);
                 }
+
+                enqueueSnackbar("Logged in Successfully",{variant: "success", style: { backgroundColor: '#9b5ff5', color: 'white' }})
+                navigate('/events')
+
+                
+            }else{
+            
+                SetLogin(!isLoggedin);
+                enqueueSnackbar("Switched to " + (isLoggedin ? "SIGN UP" : "LOG IN") + " mode", { variant: "info" });
+
             }
+
+            
         }
         )
         .catch(err => {
             console.log(err);
+
+            enqueueSnackbar("Invalid Credentials",{variant: "error"})
         })
     }
 
@@ -98,10 +116,12 @@ function Authpage(props){
             <div className="form-control">
                 <label htmlFor="email">E-mail</label>
                 <input type="email" id='email' value={email}  onChange={(e) => SetEmail(e.target.value)}/>
+                <i class='bx bxs-user'></i>
             </div>
             <div className="form-control">
                 <label htmlFor="password">Password</label>
                 <input type="password" id='password' value={password} onChange={(e) => SetPassword(e.target.value)}/>
+                <i class='bx bxs-lock-alt'></i>
             </div>
             <div className="form-actions">
                 <button type='button' onClick={ModifyLogin}>Switch to {isLoggedin?"SIGN UP":"LOG IN"}</button>

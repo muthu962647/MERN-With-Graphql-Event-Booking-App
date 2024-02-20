@@ -6,6 +6,8 @@ import AuthContext from "../context/auth-context.js";
 import EventList from "../components/Events/EventList/EventList.js";
 import Spinner from "../components/Spinner/Spinner.js";
 
+import {  useSnackbar } from 'notistack';
+
 function Eventspage(props) {
 
     const [create, setCreate] = useState(false);
@@ -17,6 +19,8 @@ function Eventspage(props) {
     const [events, setEvents] = useState([]);
     const [isLoading, setLoading] = useState(false);
     const [selectedEvent, setSelectedEvent] = useState(null);
+
+    const { enqueueSnackbar } = useSnackbar();
     
 
     const { token, userId } = useContext(AuthContext);
@@ -132,8 +136,6 @@ function Eventspage(props) {
 
             const {_id, title, description, date, price, creator} = resData.data.createEvent;
 
-            console.log({_id, title, description, date, price, creator});
-
             setEvents((prevEvents) => {
 
                 let updatedEvents = [...prevEvents];
@@ -153,6 +155,8 @@ function Eventspage(props) {
                 return updatedEvents;
 
             })
+
+            enqueueSnackbar("Event Created",{variant: "success", style: { backgroundColor: '#9b5ff5', color: 'white' }})
              
           })
           .catch(err => {
@@ -163,13 +167,59 @@ function Eventspage(props) {
   }
 
     const showDetailHandler = (eventId) => {
-        console.log(eventId);
+        
         events.map((event) => {
             if (event._id == eventId){
                 setSelectedEvent(event);
                 console.log(selectedEvent);
             }
         }) 
+
+    }
+
+    const BookEvent = () => {
+
+        let requestBody = {
+            query: `
+                mutation{
+                    bookEvent(eventId:"${selectedEvent._id}"){
+                    _id
+                    createdAt
+                    updatedAt
+                    }
+                }
+            `
+        };
+    
+        const options = {
+            method: 'POST',
+            body: JSON.stringify(requestBody),
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + token
+            }
+        };
+    
+        fetch(`http://localhost:8000/graphql`, options)
+            .then(res => {
+                
+                if (res.status !== 200 && res.status !== 201) {
+                    throw new Error('Failed!')
+                }
+                return res.json();
+            })
+            .then(resData => {
+  
+                setCreate(false);
+                setSelectedEvent(null)
+
+                enqueueSnackbar("Booked successfully",{variant: "success", style: { backgroundColor: '#9b5ff5', color: 'white' }})
+
+  
+            })
+            .catch(err => {
+                console.log(err);
+            });
 
     }
 
@@ -184,24 +234,24 @@ function Eventspage(props) {
       {create && <Modal title='Add Event' canCancel canConfirm confirmText = {"Confirm"} onCancel = {modalCancelHandler} onConfirm = {modalConfirmHandler}>
          <form >
 
-            <div className="form-control">
-                <label htmlFor="title">Title</label>
-                <input type="text" id="title" onChange= {(e) => setTitle(e.target.value)}/>
+            <div className="form-event">
+                {/* <label htmlFor="title">Title</label> */}
+                <input type="text" id="title" placeholder = "Title" onChange= {(e) => setTitle(e.target.value)}/>
             </div>
 
-            <div className="form-control">
-                <label htmlFor="price">Price</label>
-                <input type="number" id="price"  onChange={(e) => setPrice(e.target.value)}/>
+            <div className="form-event">
+                {/* <label htmlFor="price">Price</label> */}
+                <input type="number" id="price" placeholder = "Price" onChange={(e) => setPrice(e.target.value)}/>
             </div>
 
-            <div className="form-control">
-                <label htmlFor="date">Date</label>
-                <input type="datetime-local" id="date" onChange={(e) => setDate(e.target.value)}/>
+            <div className="form-event">
+                {/* <label htmlFor="date">Date</label> */}
+                <input type="datetime-local" id="date" placeholder = "Date" onChange={(e) => setDate(e.target.value)}/>
             </div>
 
-            <div className="form-control">
-                <label htmlFor="description">Description</label>
-                <textarea  id="description" rows="4"  onChange={(e) => setDescription(e.target.value)}></textarea>
+            <div className="form-event">
+                {/* <label htmlFor="description">Description</label> */}
+                <textarea  id="description" rows="4" placeholder = "Description" onChange={(e) => setDescription(e.target.value)}></textarea>
             </div>
 
 
@@ -219,7 +269,7 @@ function Eventspage(props) {
 
             {selectedEvent && <Backdrop/>}
             {selectedEvent &&
-            <Modal title = {selectedEvent.title} confirmText = {"Book"} onCancel = {modalCancelHandler} onConfirm = {showDetailHandler}>
+            <Modal title = {selectedEvent.title} confirmText = {"Book"} onCancel = {modalCancelHandler} onConfirm = {BookEvent} >
                 <h1>{selectedEvent.title}</h1>
                 <h2>
                 {selectedEvent.price} - {new Date(selectedEvent.date).toLocaleDateString()}

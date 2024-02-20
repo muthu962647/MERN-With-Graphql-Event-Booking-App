@@ -1,6 +1,15 @@
 const Event = require('../../models/event');
 const User = require('../../models/user');
 const { dateToString } = require('../../helpers/date')
+const DataLoader = require('dataloader')
+
+const eventLoader = new DataLoader((eventId) => {
+    return event(eventId)
+})
+
+const userLoader = new DataLoader(userIds => {
+    return User.find({_id: {$userIds}})
+})
 
 
 const transformEvent = event => {
@@ -12,10 +21,11 @@ const transformEvent = event => {
     }
 };
 
+
 const transformBooking = booking =>{
 
     const userId = booking._doc.user;
-    console.log(userId);
+  
 
     return {
         ...booking._doc,

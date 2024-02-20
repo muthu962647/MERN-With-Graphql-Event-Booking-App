@@ -12,7 +12,8 @@ import AuthContext from './context/auth-context.js';
 
 
 class App extends Component {
-
+ 
+  
   state = {
     token: null,
     userId: null
@@ -24,6 +25,7 @@ class App extends Component {
 
   logout = () => {
     this.setState({ token: null, userId: null})
+    
   }
 
 render() {

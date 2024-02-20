@@ -10,7 +10,7 @@ function BookingList (props) {
                     <li className="bookings_item">
                         <div className="bookings__item-data">
                             {booking.event.title} - {new Date(booking.createdAt).toLocaleString()}
-                        </div>
+                       </div>
 
                         <div className="bookings__item-actions">
                             <button className='btn' onClick={() => props.onDelete(booking._id)}>Cancel</button>

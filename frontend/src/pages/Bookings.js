@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from 'react'
 import AuthContext from '../context/auth-context';
 import Spinner from '../components/Spinner/Spinner.js';
 import BookingList from '../components/Bookings/BookingList.js';
+import {  useSnackbar } from 'notistack'
 
 
 function Bookingspage(props){
@@ -9,6 +10,8 @@ function Bookingspage(props){
     const { token } = useContext(AuthContext);
     const [bookings, setBookings] = useState([]);
     const [isLoading, setLoading] = useState(false);
+
+    const { enqueueSnackbar } = useSnackbar();
 
     useEffect(() => {
         fetchBookings();
@@ -57,6 +60,7 @@ function Bookingspage(props){
                 setBookings(resData.data.bookings);
                 setLoading(false);
 
+              
             })
             .catch(err => {
     
@@ -102,9 +106,16 @@ function Bookingspage(props){
             })
             .then(resData => {
                 
-                console.log("Deleted");
-                fetchBookings();
+                setBookings((prevBookings) => {
+                    const updatedBookings =  prevBookings.filter(booking => {
+                        return booking._id != bookingId
+                    })
+                    return updatedBookings         
+                })
+
                 setLoading(false);
+
+                enqueueSnackbar("Cancelled successfully",{variant: "success"})
 
             })
             .catch(err => {
