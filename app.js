@@ -42,7 +42,7 @@ app.get('/', (req, res) => {
     res.send("Hello World");
 });
 
-mongoose.connect(`mongodb+srv://muthukumarb9626:${process.env.MONGO_PASSWORD}@cluster0.suct4zq.mongodb.net/${process.env.MONGO_DB}?retryWrites=true&w=majority`)
+mongoose.connect(`mongodb+srv://muthukumarb9626:tkwDSQPYIqJcpEJ9@cluster0.suct4zq.mongodb.net/events-react-dev?retryWrites=true&w=majority`)
     .then(() => {
         console.log("Everything is going good");
     
