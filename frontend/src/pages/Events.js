@@ -67,7 +67,7 @@ function Eventspage(props) {
 
     setLoading(true);
 
-    fetch(`http://localhost:8000/graphql`, options)
+    fetch(`https://backend-5kak.onrender.com/graphql`,options)
         .then(res => {
             console.log(res);
             if (res.status !== 200 && res.status !== 201) {
@@ -124,7 +124,7 @@ function Eventspage(props) {
           }
       };
   
-      fetch(`http://localhost:8000/graphql`, options)
+      fetch(`https://backend-5kak.onrender.com/graphql`,options)
           .then(res => {
               
               if (res.status !== 200 && res.status !== 201) {
@@ -200,7 +200,7 @@ function Eventspage(props) {
             }
         };
     
-        fetch(`http://localhost:8000/graphql`, options)
+        fetch(`https://backend-5kak.onrender.com/graphql`,options)
             .then(res => {
                 
                 if (res.status !== 200 && res.status !== 201) {

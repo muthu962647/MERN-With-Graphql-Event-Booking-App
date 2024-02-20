@@ -71,7 +71,7 @@ function Authpage(props){
         }
 
 
-        fetch(`http://localhost:8000/graphql`,options)
+        fetch(`https://backend-5kak.onrender.com/graphql`,options)
         .then(res => {
         
             if(res.status !== 200 && res.status !==201){
